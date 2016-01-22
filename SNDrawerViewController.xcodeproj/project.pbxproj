@@ -15,6 +15,7 @@
 		89CC141C1C528319008A0AF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89CC141A1C528319008A0AF7 /* LaunchScreen.storyboard */; };
 		89CC14271C528319008A0AF7 /* SNDrawerViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14261C528319008A0AF7 /* SNDrawerViewControllerTests.m */; };
 		89CC14321C528319008A0AF7 /* SNDrawerViewControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14311C528319008A0AF7 /* SNDrawerViewControllerUITests.m */; };
+		89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		89CC142D1C528319008A0AF7 /* SNDrawerViewControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SNDrawerViewControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89CC14311C528319008A0AF7 /* SNDrawerViewControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewControllerUITests.m; sourceTree = "<group>"; };
 		89CC14331C528319008A0AF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89CC14401C5284D7008A0AF7 /* SNDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerViewController.h; sourceTree = "<group>"; };
+		89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +106,7 @@
 			children = (
 				89CC140F1C528319008A0AF7 /* AppDelegate.h */,
 				89CC14101C528319008A0AF7 /* AppDelegate.m */,
+				89CC143F1C5284CC008A0AF7 /* Drawers */,
 				89CC14121C528319008A0AF7 /* ViewController.h */,
 				89CC14131C528319008A0AF7 /* ViewController.m */,
 				89CC14151C528319008A0AF7 /* Main.storyboard */,
@@ -138,6 +142,15 @@
 				89CC14331C528319008A0AF7 /* Info.plist */,
 			);
 			path = SNDrawerViewControllerUITests;
+			sourceTree = "<group>";
+		};
+		89CC143F1C5284CC008A0AF7 /* Drawers */ = {
+			isa = PBXGroup;
+			children = (
+				89CC14401C5284D7008A0AF7 /* SNDrawerViewController.h */,
+				89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */,
+			);
+			path = Drawers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */,
 				89CC14141C528319008A0AF7 /* ViewController.m in Sources */,
 				89CC14111C528319008A0AF7 /* AppDelegate.m in Sources */,
 				89CC140E1C528319008A0AF7 /* main.m in Sources */,
@@ -501,6 +515,7 @@
 				89CC14381C528319008A0AF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89CC14391C528319008A0AF7 /* Build configuration list for PBXNativeTarget "SNDrawerViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +524,7 @@
 				89CC143B1C528319008A0AF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89CC143C1C528319008A0AF7 /* Build configuration list for PBXNativeTarget "SNDrawerViewControllerUITests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +533,7 @@
 				89CC143E1C528319008A0AF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
