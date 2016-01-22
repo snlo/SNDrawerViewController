@@ -67,7 +67,6 @@ static const CGFloat velocity_ = 10.f;
 #pragma mark -- lift cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-	self.view.backgroundColor = [UIColor blueColor];
 	[self initializeAppearance];
 }
 #pragma mark -- private methods

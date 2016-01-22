@@ -8,6 +8,12 @@
 
 #import "ViewController.h"
 
+#import "SNDrawerViewController.h"
+
+#import "MainViewController.h"
+#import "LeftViewController.h"
+#import "RightViewController.h"
+
 @interface ViewController ()
 
 @end
@@ -16,6 +22,14 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc]
+										  initWithMainViewController:[[MainViewController alloc] init]
+										  leftViewController:[[LeftViewController alloc] init]
+										  rightViewController:[[RightViewController alloc] init]];
+	
+	[self addChildViewController:SNDrawerVC];
+	[self.view addSubview:SNDrawerVC.view];
 	
 }
 

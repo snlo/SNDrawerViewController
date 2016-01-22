@@ -16,6 +16,9 @@
 		89CC14271C528319008A0AF7 /* SNDrawerViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14261C528319008A0AF7 /* SNDrawerViewControllerTests.m */; };
 		89CC14321C528319008A0AF7 /* SNDrawerViewControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14311C528319008A0AF7 /* SNDrawerViewControllerUITests.m */; };
 		89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */; };
+		89CC14451C5285B4008A0AF7 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14441C5285B4008A0AF7 /* MainViewController.m */; };
+		89CC14481C5285F1008A0AF7 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14471C5285F1008A0AF7 /* LeftViewController.m */; };
+		89CC144B1C528600008A0AF7 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC144A1C528600008A0AF7 /* RightViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +57,12 @@
 		89CC14331C528319008A0AF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89CC14401C5284D7008A0AF7 /* SNDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerViewController.h; sourceTree = "<group>"; };
 		89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewController.m; sourceTree = "<group>"; };
+		89CC14431C5285B4008A0AF7 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		89CC14441C5285B4008A0AF7 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		89CC14461C5285F1008A0AF7 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		89CC14471C5285F1008A0AF7 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
+		89CC14491C528600008A0AF7 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
+		89CC144A1C528600008A0AF7 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +118,12 @@
 				89CC143F1C5284CC008A0AF7 /* Drawers */,
 				89CC14121C528319008A0AF7 /* ViewController.h */,
 				89CC14131C528319008A0AF7 /* ViewController.m */,
+				89CC14431C5285B4008A0AF7 /* MainViewController.h */,
+				89CC14441C5285B4008A0AF7 /* MainViewController.m */,
+				89CC14461C5285F1008A0AF7 /* LeftViewController.h */,
+				89CC14471C5285F1008A0AF7 /* LeftViewController.m */,
+				89CC14491C528600008A0AF7 /* RightViewController.h */,
+				89CC144A1C528600008A0AF7 /* RightViewController.m */,
 				89CC14151C528319008A0AF7 /* Main.storyboard */,
 				89CC14181C528319008A0AF7 /* Assets.xcassets */,
 				89CC141A1C528319008A0AF7 /* LaunchScreen.storyboard */,
@@ -286,9 +301,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CC144B1C528600008A0AF7 /* RightViewController.m in Sources */,
 				89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */,
 				89CC14141C528319008A0AF7 /* ViewController.m in Sources */,
 				89CC14111C528319008A0AF7 /* AppDelegate.m in Sources */,
+				89CC14481C5285F1008A0AF7 /* LeftViewController.m in Sources */,
+				89CC14451C5285B4008A0AF7 /* MainViewController.m in Sources */,
 				89CC140E1C528319008A0AF7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
