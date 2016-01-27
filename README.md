@@ -17,4 +17,4 @@
 	[self rotatingAnimationWithHeadImageView:self.meView startAngle:M_PI_2 rate:0.2];
 }
 ```
-![](http://www.baidu.com/img/bdlogo.gif)
+![](http://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=gif&pn=0&spn=0&di=81428192670&pi=&rn=1&tn=baiduimagedetail&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=331196311%2C3720951442&os=1440499160%2C3330896890&simid=4198446197%2C474870461&adpicid=0&ln=30&fr=ala&sme=&cg=&bdtype=0&objurl=http%3A%2F%2Fc.hiphotos.baidu.com%2Fzhidao%2Fwh%3D450%2C600%2Fsign%3D925be890c2fdfc03e52debbce10faba2%2Fb8389b504fc2d562df92ce83e61190ef77c66cc1.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fzit1w5_z%26e3Bkwt17_z%26e3Bv54AzdH3Fq7jfpt5gAzdH3Fc9danddnd_z%26e3Bip4s&gsm=0)
