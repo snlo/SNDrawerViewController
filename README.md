@@ -17,3 +17,4 @@
 	[self rotatingAnimationWithHeadImageView:self.meView startAngle:M_PI_2 rate:0.2];
 }
 ```
+![](http://www.baidu.com/img/bdlogo.gif)
