@@ -11,9 +11,9 @@
     1、使用简单，方便
     2、个性化定制接口比较多，可以随意定制抽屉大小样式，以及主页缩放模式
     3、可维护性高
-<code>
-<!--//我的头像动画-->
-- (void)meViewAnimation {
+---
+//我的头像动画
+ - (void)meViewAnimation {
 	[self rotatingAnimationWithHeadImageView:self.meView startAngle:M_PI_2 rate:0.2];
 }
-</code>
+---
