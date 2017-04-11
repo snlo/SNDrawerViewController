@@ -16,7 +16,9 @@
 
 @property (nonatomic) CGFloat drawerWidth; //抽屉的宽，默认是self.view的宽的0.8倍
 @property (nonatomic) CGFloat mainYOfOpeningDrawer; //抽屉打开状态下，主页的起始坐标的高度
-@property (nonatomic) CGFloat maskAlpha; //主页蒙版，默认值为0.1f
+@property (nonatomic) CGFloat maskAlpha; //主页蒙版透明度，默认值为0.1f
+@property (nonatomic) CGFloat drawerAlpha; //左右抽屉透明度，默认值为0.1f。
+@property (nonatomic) CGFloat drawerScale;     //抽屉缩放比例。0 ~ 1,
 @property (nonatomic) CGFloat mainShadowOpacity; //主页阴影，默认值为1.0f，当maskAlpha被修改后默认值为0.0f
 
 @property (nonatomic, strong, readonly) UIScreenEdgePanGestureRecognizer *gestureOfOpeningLeftDrawer;

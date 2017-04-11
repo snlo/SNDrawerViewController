@@ -7,6 +7,7 @@
 //
 
 #import "SNDrawerViewController.h"
+#import "SNDrawer.h"
 
 @interface SNDrawerViewController ()
 
@@ -40,20 +41,21 @@
 - (CGFloat)interpolateFrom:(CGFloat)from to:(CGFloat)to percent:(CGFloat)percent;
 @end
 
-static const CGFloat leftScale_ = 0.8f;
 static const CGFloat damping_ = 1.f;
-static const CGFloat duration_ = 0.4f;
+static const CGFloat duration_ = 0.3f;
 static const CGFloat velocity_ = 10.f;
 
 @implementation SNDrawerViewController
 #pragma mark --intilate
+
+
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController leftViewController:(UIViewController *)leftViewController rightViewController:(UIViewController *)rightViewController {
-	self = [super init];
-	if (self) {
-		self.mainViewController = mainViewController;
-		self.leftViewController = leftViewController;
-		self.rightViewController = rightViewController;
-	}
+    self = [super init];
+    if (self) {
+        self.mainViewController = mainViewController;
+        self.leftViewController = leftViewController;
+        self.rightViewController = rightViewController;
+    }
 	return self;
 }
 
@@ -76,14 +78,14 @@ static const CGFloat velocity_ = 10.f;
 		[self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
 		[self addChildViewController:self.leftViewController];
 		[self.leftViewController didMoveToParentViewController:self];
-		self.leftViewController.view.transform = CGAffineTransformMakeScale(leftScale_, leftScale_);
+		self.leftViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
 	}
 	//加载右抽屉
 	if (self.rightViewController) {
 		[self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
 		[self addChildViewController:self.rightViewController];
 		[self.rightViewController didMoveToParentViewController:self];
-		self.rightViewController.view.transform = CGAffineTransformMakeScale(leftScale_, leftScale_);
+		self.rightViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
 	}
 	//加载主控制器
 	[self addChildViewController:self.mainViewController];
@@ -117,9 +119,9 @@ static const CGFloat velocity_ = 10.f;
 	} else if (isLeft && !isOpen) {
 		//关闭左抽屉
 		frame = self.view.bounds;
-		scale = leftScale_;
+		scale = self.drawerScale;
 		maskAlpha = 0;
-		drawerAlpha = self.maskAlpha;
+		drawerAlpha = self.drawerAlpha;
 		mainShadowOpacity = 0;
 		completionBlock = ^(BOOL flag) {
 			[self.leftViewController.view removeGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
@@ -149,9 +151,9 @@ static const CGFloat velocity_ = 10.f;
 	} else {
 		//关闭右抽屉
 		frame = self.view.bounds;
-		scale = leftScale_;
+		scale = self.drawerScale;
 		maskAlpha = 0;
-		drawerAlpha = self.maskAlpha;
+		drawerAlpha = self.drawerAlpha;
 		mainShadowOpacity = 0;
 		completionBlock = ^(BOOL flag) {
 			[self.rightViewController.view removeGestureRecognizer:self.panGestureOfOpeningRightDrawer];
@@ -198,7 +200,6 @@ static const CGFloat velocity_ = 10.f;
 
 #pragma mark -- callblock / action
 - (void)responsToGesture:(UIScreenEdgePanGestureRecognizer *)gesture {
-	
 	if (gesture.edges == UIRectEdgeLeft) {
 		if (gesture.state == UIGestureRecognizerStateBegan) {
 			[self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
@@ -210,12 +211,12 @@ static const CGFloat velocity_ = 10.f;
 				if (percent > 1) {
 					percent = 1;
 				}
-				CGFloat scale = [self interpolateFrom:leftScale_ to:1 percent:percent];
+				CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
 				CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:percent];
 				CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
 				CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds) to:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer percent:percent];
 				CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
-				CGFloat drawerViewAlpha = [self interpolateFrom:self.maskAlpha to:1 percent:percent];
+				CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
 				CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
 				self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
 				self.leftViewController.view.alpha = drawerViewAlpha;
@@ -244,12 +245,12 @@ static const CGFloat velocity_ = 10.f;
 				if (percent > 1) {
 					percent = 1;
 				}
-				CGFloat scale = [self interpolateFrom:leftScale_ to:1 percent:percent];
+				CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
 				CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:-percent];
 				CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
 				CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds) to:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer percent:percent];
 				CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
-				CGFloat drawerViewAlpha = [self interpolateFrom:self.maskAlpha to:1 percent:percent];
+				CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
 				CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
 				self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
 				self.rightViewController.view.alpha = drawerViewAlpha;
@@ -267,6 +268,7 @@ static const CGFloat velocity_ = 10.f;
 			}
 		}
 	} else {
+        NSLog(@"手势识别失败");
 		return;
 	}
 }
@@ -305,8 +307,8 @@ static const CGFloat velocity_ = 10.f;
 		CGFloat x;
 		CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer to:CGRectGetHeight(self.view.bounds) percent:percent];
 		CGFloat y = [self interpolateFrom:self.mainYOfOpeningDrawer to:0 percent:percent];
-		CGFloat scale = [self interpolateFrom:1 to:leftScale_ percent:percent];
-		CGFloat drawerViewAlpha = [self interpolateFrom:1 to:self.maskAlpha percent:percent];
+		CGFloat scale = [self interpolateFrom:1 to:self.drawerScale percent:percent];
+		CGFloat drawerViewAlpha = [self interpolateFrom:1 to:self.drawerAlpha percent:percent];
 		CGFloat mainShadowOpacity = [self interpolateFrom:self.mainShadowOpacity to:0 percent:percent];
 		CGFloat alpha = [self interpolateFrom:self.maskAlpha to:0 percent:percent];
 		if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
@@ -347,8 +349,9 @@ static const CGFloat velocity_ = 10.f;
 
 - (UIScreenEdgePanGestureRecognizer *)gestureOfOpeningLeftDrawer {
 	if (!_gestureOfOpeningLeftDrawer) {
-		_gestureOfOpeningLeftDrawer = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(responsToGesture:)];
-		_gestureOfOpeningLeftDrawer.edges = UIRectEdgeLeft;
+        _gestureOfOpeningLeftDrawer = [[UIScreenEdgePanGestureRecognizer alloc] init];
+        _gestureOfOpeningLeftDrawer.edges = UIRectEdgeLeft;
+        [_gestureOfOpeningLeftDrawer addTarget:self action:@selector(responsToGesture:)];
 	}
 	return _gestureOfOpeningLeftDrawer;
 }
@@ -397,9 +400,23 @@ static const CGFloat velocity_ = 10.f;
 }
 - (CGFloat)maskAlpha {
 	if (!_maskAlpha) {
-		_maskAlpha = 0.1f;
+		_maskAlpha = .1f;
 	}
 	return _maskAlpha;
+}
+- (CGFloat)drawerAlpha
+{
+    if (!_drawerAlpha) {
+        _drawerAlpha = .1f;
+    }
+    return _drawerAlpha;
+}
+- (CGFloat)drawerScale
+{
+    if (!_drawerScale) {
+        _drawerScale = 0.8f;
+    }
+    return _drawerScale;
 }
 - (CGFloat)mainShadowOpacity {
 	if (!_mainShadowOpacity) {

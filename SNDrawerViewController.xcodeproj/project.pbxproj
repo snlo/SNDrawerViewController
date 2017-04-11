@@ -15,10 +15,11 @@
 		89CC141C1C528319008A0AF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89CC141A1C528319008A0AF7 /* LaunchScreen.storyboard */; };
 		89CC14271C528319008A0AF7 /* SNDrawerViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14261C528319008A0AF7 /* SNDrawerViewControllerTests.m */; };
 		89CC14321C528319008A0AF7 /* SNDrawerViewControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14311C528319008A0AF7 /* SNDrawerViewControllerUITests.m */; };
-		89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */; };
 		89CC14451C5285B4008A0AF7 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14441C5285B4008A0AF7 /* MainViewController.m */; };
 		89CC14481C5285F1008A0AF7 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14471C5285F1008A0AF7 /* LeftViewController.m */; };
 		89CC144B1C528600008A0AF7 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC144A1C528600008A0AF7 /* RightViewController.m */; };
+		B38184981E9CD68800B411BA /* SNDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = B38184941E9CD68800B411BA /* SNDrawer.m */; };
+		B38184991E9CD68800B411BA /* SNDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B38184971E9CD68800B411BA /* SNDrawerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,14 +56,17 @@
 		89CC142D1C528319008A0AF7 /* SNDrawerViewControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SNDrawerViewControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89CC14311C528319008A0AF7 /* SNDrawerViewControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewControllerUITests.m; sourceTree = "<group>"; };
 		89CC14331C528319008A0AF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89CC14401C5284D7008A0AF7 /* SNDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerViewController.h; sourceTree = "<group>"; };
-		89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewController.m; sourceTree = "<group>"; };
 		89CC14431C5285B4008A0AF7 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		89CC14441C5285B4008A0AF7 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		89CC14461C5285F1008A0AF7 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
 		89CC14471C5285F1008A0AF7 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		89CC14491C528600008A0AF7 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		89CC144A1C528600008A0AF7 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
+		B38184931E9CD68800B411BA /* SNDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawer.h; sourceTree = "<group>"; };
+		B38184941E9CD68800B411BA /* SNDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawer.m; sourceTree = "<group>"; };
+		B38184951E9CD68800B411BA /* SNDrawerFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerFramework.h; sourceTree = "<group>"; };
+		B38184961E9CD68800B411BA /* SNDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerViewController.h; sourceTree = "<group>"; };
+		B38184971E9CD68800B411BA /* SNDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +166,11 @@
 		89CC143F1C5284CC008A0AF7 /* Drawers */ = {
 			isa = PBXGroup;
 			children = (
-				89CC14401C5284D7008A0AF7 /* SNDrawerViewController.h */,
-				89CC14411C5284D7008A0AF7 /* SNDrawerViewController.m */,
+				B38184931E9CD68800B411BA /* SNDrawer.h */,
+				B38184941E9CD68800B411BA /* SNDrawer.m */,
+				B38184951E9CD68800B411BA /* SNDrawerFramework.h */,
+				B38184961E9CD68800B411BA /* SNDrawerViewController.h */,
+				B38184971E9CD68800B411BA /* SNDrawerViewController.m */,
 			);
 			path = Drawers;
 			sourceTree = "<group>";
@@ -230,7 +237,7 @@
 		89CC14011C528319008A0AF7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = snloveydus;
 				TargetAttributes = {
 					89CC14081C528319008A0AF7 = {
@@ -301,13 +308,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B38184991E9CD68800B411BA /* SNDrawerViewController.m in Sources */,
 				89CC144B1C528600008A0AF7 /* RightViewController.m in Sources */,
-				89CC14421C5284D7008A0AF7 /* SNDrawerViewController.m in Sources */,
 				89CC14141C528319008A0AF7 /* ViewController.m in Sources */,
 				89CC14111C528319008A0AF7 /* AppDelegate.m in Sources */,
 				89CC14481C5285F1008A0AF7 /* LeftViewController.m in Sources */,
 				89CC14451C5285B4008A0AF7 /* MainViewController.m in Sources */,
 				89CC140E1C528319008A0AF7 /* main.m in Sources */,
+				B38184981E9CD68800B411BA /* SNDrawer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,8 +383,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -398,7 +408,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -419,8 +429,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -436,7 +448,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -449,6 +461,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SNDrawerViewController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SNLO.SNDrawerViewController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -460,6 +473,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SNDrawerViewController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SNLO.SNDrawerViewController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
