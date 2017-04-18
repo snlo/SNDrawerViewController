@@ -8,34 +8,104 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, SNDrawerViewState) {
+    SNDrawerViewStateNone,          //默认，尚未开起抽屉的状态
+    SNDrawerViewStateLeftOpening,   //左抽屉开起状态
+    SNDrawerViewStateRightOpening   //右抽屉开起状态
+};
+
 @interface SNDrawerViewController : UIViewController
 
 @property (nonatomic, strong, readonly) UIViewController *mainViewController;
 @property (nonatomic, strong, readonly) UIViewController *leftViewController;
 @property (nonatomic, strong, readonly) UIViewController *rightViewController;
 
-@property (nonatomic) CGFloat drawerWidth; //抽屉的宽，默认是self.view的宽的0.8倍
-@property (nonatomic) CGFloat mainYOfOpeningDrawer; //抽屉打开状态下，主页的起始坐标的高度
-@property (nonatomic) CGFloat maskAlpha; //主页蒙版透明度，默认值为0.1f
-@property (nonatomic) CGFloat drawerAlpha; //左右抽屉透明度，默认值为0.1f。
-@property (nonatomic) CGFloat drawerScale;     //抽屉缩放比例。0 ~ 1,
-@property (nonatomic) CGFloat mainShadowOpacity; //主页阴影，默认值为1.0f，当maskAlpha被修改后默认值为0.0f
+/**
+ 抽屉的宽，默认是当前屏幕的宽的0.8倍
+ */
+@property (nonatomic) CGFloat drawerWidth;
 
+/**
+ 抽屉打开状态下，主页的起始坐标的高度
+ */
+@property (nonatomic) CGFloat mainYOfOpeningDrawer;
+
+/**
+ 主页蒙版透明度，默认值为0.1f
+ */
+@property (nonatomic) CGFloat maskAlpha;
+
+/**
+ 左右抽屉透明度，默认值为0.1f。
+ */
+@property (nonatomic) CGFloat drawerAlpha;
+
+/**
+ 抽屉缩放比例。0 ~ 1,
+ */
+@property (nonatomic) CGFloat drawerScale;
+
+/**
+ 主页阴影，默认值为1.0f，当maskAlpha被修改后默认值为0.0f
+ */
+@property (nonatomic) CGFloat mainShadowOpacity;
+
+/**
+ 抽屉开起状态。
+ */
+@property (nonatomic, assign) SNDrawerViewState drawerState;
+
+/**
+ 屏幕边缘手势，用于打开左右抽屉。
+ */
 @property (nonatomic, strong, readonly) UIScreenEdgePanGestureRecognizer *gestureOfOpeningLeftDrawer;
 @property (nonatomic, strong, readonly) UIScreenEdgePanGestureRecognizer *gestureOfOpeningRightDrawer;
+
+/**
+ 左右抽屉拖拽手势，用于打开左右抽屉，加载在viewcontroller上的。
+ */
 @property (nonatomic, strong, readonly) UIPanGestureRecognizer *panGestureOfOpeningLeftDrawer;
 @property (nonatomic, strong, readonly) UIPanGestureRecognizer *panGestureOfOpeningRightDrawer;
 
-//designate
+
+/**
+ 左右抽屉初始化
+ 
+ @param mainViewController 主视图控制器
+ @param leftViewController 左抽屉控制器
+ @param rightViewController 右抽屉控制器
+ @return SNDrawerViewController
+ */
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController leftViewController:(UIViewController *)leftViewController rightViewController:(UIViewController *)rightViewController;
-//secondary 
+
+/**
+ 左抽屉初始化
+ 
+ @param mainViewController 主视图控制器
+ @param leftViewController 左抽屉控制器
+ @return SNDrawerViewController
+ */
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController leftViewController:(UIViewController *)leftViewController;
-//thrice
+
+/**
+ 右抽屉控制器
+ 
+ @param mainViewController 主视图控制器
+ @param rightViewController 右抽屉控制器
+ @return SNDrawerViewController
+ */
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController rightViewController:(UIViewController *)rightViewController;
-//抽屉的打开和关闭
+
+/**
+ 快速打开左右抽屉捷径
+ */
 - (void)openLeftDrawer;
-- (void)closeLeftDrawer;
 - (void)openRightDrawer;
+
+/**
+ 快速关闭左右抽屉捷径
+ */
+- (void)closeLeftDrawer;
 - (void)closeRightDrawer;
 
 @end

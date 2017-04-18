@@ -13,10 +13,14 @@
 
 @property (nonatomic) SNDrawerViewController * drawerViewController;
 
-//管理初始化的抽屉
+/**
+ 单例初始化
+ */
 + (instancetype)sharedManager;
 
-//共享的抽屉
+/**
+ 全局的 SNDrawerViewController
+ */
 + (SNDrawerViewController *)sharedDrawer;
 
 @end

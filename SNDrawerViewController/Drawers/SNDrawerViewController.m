@@ -11,6 +11,8 @@
 
 @interface SNDrawerViewController ()
 
+@property (nonatomic, assign) CGFloat k_drawerWidth;
+
 @property (nonatomic, strong) UIViewController *mainViewController;
 @property (nonatomic, strong) UIViewController *leftViewController;
 @property (nonatomic, strong) UIViewController *rightViewController;
@@ -39,6 +41,10 @@
  *  @return 插值结果
  */
 - (CGFloat)interpolateFrom:(CGFloat)from to:(CGFloat)to percent:(CGFloat)percent;
+
+#define MAINSCREENBOUNDS [UIScreen mainScreen].bounds
+#define MAINBOUNDS self.view.bounds
+
 @end
 
 static const CGFloat damping_ = 1.f;
@@ -56,353 +62,400 @@ static const CGFloat velocity_ = 10.f;
         self.leftViewController = leftViewController;
         self.rightViewController = rightViewController;
     }
-	return self;
+    return self;
 }
 
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController leftViewController:(UIViewController *)leftViewController {
-	return [self initWithMainViewController:mainViewController leftViewController:leftViewController rightViewController:nil];
+    return [self initWithMainViewController:mainViewController leftViewController:leftViewController rightViewController:nil];
 }
 
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController rightViewController:(UIViewController *)rightViewController {
-	return [self initWithMainViewController:mainViewController leftViewController:nil rightViewController:rightViewController];
+    return [self initWithMainViewController:mainViewController leftViewController:nil rightViewController:rightViewController];
 }
 #pragma mark -- lift cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[self initializeAppearance];
+    [self initializeAppearance];
 }
+- (void)viewWillLayoutSubviews {
+    [self k_drawerWidth];
+}
+- (void)viewDidLayoutSubviews {
+    [self maskView];
+    
+    self.leftViewController.view.frame = CGRectMake(0, 0, MAINSCREENBOUNDS.size.width, MAINSCREENBOUNDS.size.height);
+    self.rightViewController.view.frame = CGRectMake(0, 0, MAINSCREENBOUNDS.size.width, MAINSCREENBOUNDS.size.height);
+}
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    CGRect mainViewFrame = self.mainViewController.view.frame;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:[coordinator transitionDuration] animations:^{
+        __strong typeof(self) self = weakSelf;
+        switch (self.drawerState) {
+            case SNDrawerViewStateNone: {
+                
+            } break;
+            case SNDrawerViewStateLeftOpening: {
+                self.mainViewController.view.frame = CGRectMake(self.k_drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
+            } break;
+            case SNDrawerViewStateRightOpening: {
+                self.mainViewController.view.frame = CGRectMake( - self.k_drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
+            } break;
+            default: {
+                
+            } break;
+        }
+    }];
+}
+
 #pragma mark -- private methods
 - (void)initializeAppearance {
-	//加载左抽屉
-	if (self.leftViewController) {
-		[self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
-		[self addChildViewController:self.leftViewController];
-		[self.leftViewController didMoveToParentViewController:self];
-		self.leftViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
-	}
-	//加载右抽屉
-	if (self.rightViewController) {
-		[self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
-		[self addChildViewController:self.rightViewController];
-		[self.rightViewController didMoveToParentViewController:self];
-		self.rightViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
-	}
-	//加载主控制器
-	[self addChildViewController:self.mainViewController];
-	[self.view addSubview:self.mainViewController.view];
-	self.mainViewController.view.layer.shadowOffset = CGSizeMake(0, 0);
-	self.mainViewController.view.layer.shadowRadius = 10;
-	[self.mainViewController didMoveToParentViewController:self];
+    //加载左抽屉
+    if (self.leftViewController) {
+        [self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
+        [self addChildViewController:self.leftViewController];
+        [self.leftViewController didMoveToParentViewController:self];
+        self.leftViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
+    }
+    //加载右抽屉
+    if (self.rightViewController) {
+        [self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
+        [self addChildViewController:self.rightViewController];
+        [self.rightViewController didMoveToParentViewController:self];
+        self.rightViewController.view.transform = CGAffineTransformMakeScale(self.drawerScale, self.drawerScale);
+    }
+    //加载主控制器
+    [self addChildViewController:self.mainViewController];
+    [self.view addSubview:self.mainViewController.view];
+    self.mainViewController.view.layer.shadowOffset = CGSizeMake(0, 0);
+    self.mainViewController.view.layer.shadowRadius = 10;
+    [self.mainViewController didMoveToParentViewController:self];
 }
 
 - (void)handleDrawerForLeft:(BOOL)isLeft open:(BOOL)isOpen {
-	CGRect frame = CGRectZero;
-	CGFloat scale;
-	CGFloat maskAlpha;
-	CGFloat drawerAlpha;
-	CGFloat mainShadowOpacity;
-	void (^completionBlock)(BOOL) = nil;
-	if (isLeft && isOpen) {
-		//打开左抽屉
-		[self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
-		[self.leftViewController.view addGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
-		[self.mainViewController.view addSubview:self.maskView];
-		frame = CGRectMake(self.drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 2*self.mainYOfOpeningDrawer);
-		scale = 1;
-		maskAlpha = self.maskAlpha;
-		drawerAlpha = 1;
-		mainShadowOpacity = self.mainShadowOpacity;
-		[self.view removeGestureRecognizer:self.gestureOfOpeningLeftDrawer];
-		if (self.rightViewController) {
-			[self.view removeGestureRecognizer:self.gestureOfOpeningRightDrawer];
-		}
-	} else if (isLeft && !isOpen) {
-		//关闭左抽屉
-		frame = self.view.bounds;
-		scale = self.drawerScale;
-		maskAlpha = 0;
-		drawerAlpha = self.drawerAlpha;
-		mainShadowOpacity = 0;
-		completionBlock = ^(BOOL flag) {
-			[self.leftViewController.view removeGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
-			[self.leftViewController.view removeFromSuperview];
-			[self.maskView removeFromSuperview];
-			[self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
-			if (self.rightViewController) {
-				[self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
-			}
-		};
-	} else if (!isLeft && isOpen) {
-		//打开右抽屉
-		[self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
-		[self.rightViewController.view addGestureRecognizer:self.panGestureOfOpeningRightDrawer];
-		[self.mainViewController.view addSubview:self.maskView];
-		[self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
-		[self.mainViewController.view addSubview:self.maskView];
-		frame = CGRectMake(-self.drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 2*self.mainYOfOpeningDrawer);
-		scale = 1;
-		maskAlpha = self.maskAlpha;
-		drawerAlpha = 1;
-		mainShadowOpacity = self.mainShadowOpacity;
-		[self.view removeGestureRecognizer:self.gestureOfOpeningRightDrawer];
-		if (self.leftViewController) {
-			[self.view removeGestureRecognizer:self.gestureOfOpeningLeftDrawer];
-		}
-	} else {
-		//关闭右抽屉
-		frame = self.view.bounds;
-		scale = self.drawerScale;
-		maskAlpha = 0;
-		drawerAlpha = self.drawerAlpha;
-		mainShadowOpacity = 0;
-		completionBlock = ^(BOOL flag) {
-			[self.rightViewController.view removeGestureRecognizer:self.panGestureOfOpeningRightDrawer];
-			[self.rightViewController.view removeFromSuperview];
-			[self.maskView removeFromSuperview];
-			[self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
-			if (self.leftViewController) {
-				[self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
-			}
-		};
-	}
-	[UIView animateWithDuration:duration_ delay:0 usingSpringWithDamping:damping_ initialSpringVelocity:velocity_ options:UIViewAnimationOptionCurveEaseInOut animations:^{
-		self.mainViewController.view.frame = frame;
-		self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
-		self.maskView.frame = self.mainViewController.view.bounds;
-		if (isLeft) {
-			self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-			self.leftViewController.view.alpha = drawerAlpha;
-		} else {
-			self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-			self.rightViewController.view.alpha = drawerAlpha;
-		}
-		self.maskView.alpha = maskAlpha;
-	} completion:completionBlock];
+    CGRect frame = CGRectZero;
+    CGFloat scale;
+    CGFloat maskAlpha;
+    CGFloat drawerAlpha;
+    CGFloat mainShadowOpacity;
+    void (^completionBlock)(BOOL) = nil;
+    if (isLeft && isOpen) {
+        //打开左抽屉
+        [self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
+        [self.leftViewController.view addGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
+        [self.mainViewController.view addSubview:self.maskView];
+        frame = CGRectMake(self.k_drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
+        scale = 1;
+        maskAlpha = self.maskAlpha;
+        drawerAlpha = 1;
+        mainShadowOpacity = self.mainShadowOpacity;
+        [self.view removeGestureRecognizer:self.gestureOfOpeningLeftDrawer];
+        if (self.rightViewController) {
+            [self.view removeGestureRecognizer:self.gestureOfOpeningRightDrawer];
+        }
+    } else if (isLeft && !isOpen) {
+        //关闭左抽屉
+        frame = MAINBOUNDS;
+        scale = self.drawerScale;
+        maskAlpha = 0;
+        drawerAlpha = self.drawerAlpha;
+        mainShadowOpacity = 0;
+        __weak typeof(self) weakSelf = self;
+        completionBlock = ^(BOOL flag) {
+            __strong typeof(self) self = weakSelf;
+            [self.leftViewController.view removeGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
+            [self.leftViewController.view removeFromSuperview];
+            [self.maskView removeFromSuperview];
+            [self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
+            if (self.rightViewController) {
+                [self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
+            }
+        };
+    } else if (!isLeft && isOpen) {
+        //打开右抽屉
+        [self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
+        [self.rightViewController.view addGestureRecognizer:self.panGestureOfOpeningRightDrawer];
+        [self.mainViewController.view addSubview:self.maskView];
+        [self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
+        [self.mainViewController.view addSubview:self.maskView];
+        frame = CGRectMake(-self.k_drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
+        scale = 1;
+        maskAlpha = self.maskAlpha;
+        drawerAlpha = 1;
+        mainShadowOpacity = self.mainShadowOpacity;
+        [self.view removeGestureRecognizer:self.gestureOfOpeningRightDrawer];
+        if (self.leftViewController) {
+            [self.view removeGestureRecognizer:self.gestureOfOpeningLeftDrawer];
+        }
+    } else {
+        //关闭右抽屉
+        frame = MAINBOUNDS;
+        scale = self.drawerScale;
+        maskAlpha = 0;
+        drawerAlpha = self.drawerAlpha;
+        mainShadowOpacity = 0;
+        __weak typeof(self) weakSelf = self;
+        completionBlock = ^(BOOL flag) {
+            __strong typeof(self) self = weakSelf;
+            [self.rightViewController.view removeGestureRecognizer:self.panGestureOfOpeningRightDrawer];
+            [self.rightViewController.view removeFromSuperview];
+            [self.maskView removeFromSuperview];
+            [self.view addGestureRecognizer:self.gestureOfOpeningRightDrawer];
+            if (self.leftViewController) {
+                [self.view addGestureRecognizer:self.gestureOfOpeningLeftDrawer];
+            }
+        };
+    }
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:duration_ delay:0 usingSpringWithDamping:damping_ initialSpringVelocity:velocity_ options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        __strong typeof(self) self = weakSelf;
+        self.mainViewController.view.frame = frame;
+        self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
+        self.maskView.frame = self.mainViewController.view.bounds;
+        if (isLeft) {
+            self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+            self.leftViewController.view.alpha = drawerAlpha;
+        } else {
+            self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+            self.rightViewController.view.alpha = drawerAlpha;
+        }
+        self.maskView.alpha = maskAlpha;
+    } completion:completionBlock];
 }
 
 - (CGFloat)interpolateFrom:(CGFloat)from to:(CGFloat)to percent:(CGFloat)percent {
-	return from + (to - from) * percent;
+    return from + (to - from) * percent;
 }
 #pragma mark -- interface methods
 - (void)openLeftDrawer {
-	[self handleDrawerForLeft:YES open:YES];
+    [self handleDrawerForLeft:YES open:YES];
+    self.drawerState = SNDrawerViewStateLeftOpening;
 }
 - (void)closeLeftDrawer {
-	[self handleDrawerForLeft:YES open:NO];
+    [self handleDrawerForLeft:YES open:NO];
+    self.drawerState = SNDrawerViewStateNone;
 }
 
 - (void)openRightDrawer {
-	[self handleDrawerForLeft:NO open:YES];
+    [self handleDrawerForLeft:NO open:YES];
+    self.drawerState = SNDrawerViewStateRightOpening;
 }
 - (void)closeRightDrawer {
-	[self handleDrawerForLeft:NO open:NO];
+    [self handleDrawerForLeft:NO open:NO];
+    self.drawerState = SNDrawerViewStateNone;
 }
 
 #pragma mark -- callblock / action
 - (void)responsToGesture:(UIScreenEdgePanGestureRecognizer *)gesture {
-	if (gesture.edges == UIRectEdgeLeft) {
-		if (gesture.state == UIGestureRecognizerStateBegan) {
-			[self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
-			[self.mainViewController.view addSubview:self.maskView];
-		} else if (gesture.state == UIGestureRecognizerStateChanged) {
-			CGPoint translation = [gesture translationInView:gesture.view];
-			if (translation.x > 0) {
-				CGFloat percent = translation.x / 250.f;
-				if (percent > 1) {
-					percent = 1;
-				}
-				CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
-				CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:percent];
-				CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
-				CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds) to:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer percent:percent];
-				CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
-				CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
-				CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
-				self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-				self.leftViewController.view.alpha = drawerViewAlpha;
-				self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(self.view.bounds), heigh);
-				self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
-				self.maskView.alpha = maskAlpha;
-				self.maskView.frame = self.mainViewController.view.bounds;
-			}
-		} else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
-			CGPoint velocity = [gesture velocityInView:gesture.view];
-			if (velocity.x > 0) {
-				[self openLeftDrawer];
-			} else {
-				[self closeLeftDrawer];
-			}
-		}
-		
-	} else if (gesture.edges == UIRectEdgeRight) {
-		if (gesture.state == UIGestureRecognizerStateBegan) {
-			[self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
-			[self.mainViewController.view addSubview:self.maskView];
-		} else if (gesture.state == UIGestureRecognizerStateChanged) {
-			CGPoint translation = [gesture translationInView:gesture.view];
-			if (translation.x < 0) {
-				CGFloat percent = translation.x / -250.f;
-				if (percent > 1) {
-					percent = 1;
-				}
-				CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
-				CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:-percent];
-				CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
-				CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds) to:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer percent:percent];
-				CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
-				CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
-				CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
-				self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-				self.rightViewController.view.alpha = drawerViewAlpha;
-				self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(self.view.bounds), heigh);
-				self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
-				self.maskView.alpha = maskAlpha;
-				self.maskView.frame = self.mainViewController.view.bounds;
-			}
-		} else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
-			CGPoint velocity = [gesture velocityInView:gesture.view];
-			if (velocity.x < 0) {
-				[self openRightDrawer];
-			} else {
-				[self closeRightDrawer];
-			}
-		}
-	} else {
+    if (gesture.edges == UIRectEdgeLeft) {
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            [self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
+            [self.mainViewController.view addSubview:self.maskView];
+        } else if (gesture.state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gesture translationInView:gesture.view];
+            if (translation.x > 0) {
+                CGFloat percent = translation.x / 250.f;
+                if (percent > 1) {
+                    percent = 1;
+                }
+                CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
+                CGFloat x = [self interpolateFrom:0 to:self.k_drawerWidth percent:percent];
+                CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
+                CGFloat heigh = [self interpolateFrom:CGRectGetHeight(MAINBOUNDS) to:CGRectGetHeight(MAINBOUNDS)-2*self.mainYOfOpeningDrawer percent:percent];
+                CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
+                CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
+                CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
+                self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+                self.leftViewController.view.alpha = drawerViewAlpha;
+                self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(MAINBOUNDS), heigh);
+                self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
+                self.maskView.alpha = maskAlpha;
+                self.maskView.frame = self.mainViewController.view.bounds;
+            }
+        } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
+            CGPoint velocity = [gesture velocityInView:gesture.view];
+            if (velocity.x > 0) {
+                [self openLeftDrawer];
+            } else {
+                [self closeLeftDrawer];
+            }
+        }
+        
+    } else if (gesture.edges == UIRectEdgeRight) {
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            [self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
+            [self.mainViewController.view addSubview:self.maskView];
+        } else if (gesture.state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [gesture translationInView:gesture.view];
+            if (translation.x < 0) {
+                CGFloat percent = translation.x / -250.f;
+                if (percent > 1) {
+                    percent = 1;
+                }
+                CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
+                CGFloat x = [self interpolateFrom:0 to:self.k_drawerWidth percent:-percent];
+                CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
+                CGFloat heigh = [self interpolateFrom:CGRectGetHeight(MAINBOUNDS) to:CGRectGetHeight(MAINBOUNDS)-2*self.mainYOfOpeningDrawer percent:percent];
+                CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
+                CGFloat drawerViewAlpha = [self interpolateFrom:self.drawerAlpha to:1 percent:percent];
+                CGFloat mainShadowOpacity = [self interpolateFrom:0 to:self.mainShadowOpacity percent:percent];
+                self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+                self.rightViewController.view.alpha = drawerViewAlpha;
+                self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(MAINBOUNDS), heigh);
+                self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
+                self.maskView.alpha = maskAlpha;
+                self.maskView.frame = self.mainViewController.view.bounds;
+            }
+        } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
+            CGPoint velocity = [gesture velocityInView:gesture.view];
+            if (velocity.x < 0) {
+                [self openRightDrawer];
+            } else {
+                [self closeRightDrawer];
+            }
+        }
+    } else {
         NSLog(@"手势识别失败");
-		return;
-	}
+        return;
+    }
 }
 
 - (void)tapOnMaskView:(UITapGestureRecognizer *)gesture {
-	if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
-		[self closeRightDrawer];
-	} else {
-		[self closeLeftDrawer];
-	}
+    if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
+        [self closeRightDrawer];
+    } else {
+        [self closeLeftDrawer];
+    }
 }
 - (void)panOnMaskView:(UIPanGestureRecognizer *)gesture {
-	if (gesture.state == UIGestureRecognizerStateBegan) {
-		CGPoint velocity = [gesture velocityInView:self.view];
-		if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
-			self.shouldBeginOpenning = (velocity.x > 0);
-		} else {
-			self.shouldBeginOpenning = (velocity.x < 0);
-		}
-	} else if (gesture.state == UIGestureRecognizerStateChanged) {
-		if (!self.shouldBeginOpenning) {
-			return;
-		}
-		// 控制抽屉vc的动画进程
-		CGPoint translation = [gesture translationInView:self.view];
-		CGFloat percent;
-		if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
-			percent = translation.x / 250.f;
-		} else {
-			percent = translation.x / -250.f;
-		}
-		if (percent > 1) {
-			percent = 1;
-			return;
-		}
-		CGFloat x;
-		CGFloat heigh = [self interpolateFrom:CGRectGetHeight(self.view.bounds)-2*self.mainYOfOpeningDrawer to:CGRectGetHeight(self.view.bounds) percent:percent];
-		CGFloat y = [self interpolateFrom:self.mainYOfOpeningDrawer to:0 percent:percent];
-		CGFloat scale = [self interpolateFrom:1 to:self.drawerScale percent:percent];
-		CGFloat drawerViewAlpha = [self interpolateFrom:1 to:self.drawerAlpha percent:percent];
-		CGFloat mainShadowOpacity = [self interpolateFrom:self.mainShadowOpacity to:0 percent:percent];
-		CGFloat alpha = [self interpolateFrom:self.maskAlpha to:0 percent:percent];
-		if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
-			x = [self interpolateFrom:-self.drawerWidth to:0 percent:percent];
-			self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-			self.rightViewController.view.alpha = drawerViewAlpha;
-		} else {
-			x = [self interpolateFrom:self.drawerWidth to:0 percent:percent];
-			self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
-			self.leftViewController.view.alpha = drawerViewAlpha;
-		}
-		self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(self.view.bounds), heigh);
-		self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
-		self.maskView.alpha = alpha;
-		self.maskView.frame = self.mainViewController.view.bounds;
-	} else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
-		if (!self.shouldBeginOpenning) {
-			return;
-		}
-		CGPoint velocity = [gesture velocityInView:self.view];
-		if (self.mainViewController.view.center.x < CGRectGetWidth(self.view.bounds)/2) {
-			if (velocity.x < 0) {
-				[self openRightDrawer];
-			} else {
-				[self closeRightDrawer];
-			}
-		} else {
-			if (velocity.x > 0) {
-				[self openLeftDrawer];
-			} else {
-				[self closeLeftDrawer];
-			}
-		}
-	}
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        CGPoint velocity = [gesture velocityInView:self.view];
+        if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
+            self.shouldBeginOpenning = (velocity.x > 0);
+        } else {
+            self.shouldBeginOpenning = (velocity.x < 0);
+        }
+    } else if (gesture.state == UIGestureRecognizerStateChanged) {
+        if (!self.shouldBeginOpenning) {
+            return;
+        }
+        // 控制抽屉vc的动画进程
+        CGPoint translation = [gesture translationInView:self.view];
+        CGFloat percent;
+        if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
+            percent = translation.x / 250.f;
+        } else {
+            percent = translation.x / -250.f;
+        }
+        if (percent > 1) {
+            percent = 1;
+            return;
+        }
+        CGFloat x;
+        CGFloat heigh = [self interpolateFrom:CGRectGetHeight(MAINBOUNDS)-2*self.mainYOfOpeningDrawer to:CGRectGetHeight(MAINBOUNDS) percent:percent];
+        CGFloat y = [self interpolateFrom:self.mainYOfOpeningDrawer to:0 percent:percent];
+        CGFloat scale = [self interpolateFrom:1 to:self.drawerScale percent:percent];
+        CGFloat drawerViewAlpha = [self interpolateFrom:1 to:self.drawerAlpha percent:percent];
+        CGFloat mainShadowOpacity = [self interpolateFrom:self.mainShadowOpacity to:0 percent:percent];
+        CGFloat alpha = [self interpolateFrom:self.maskAlpha to:0 percent:percent];
+        if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
+            x = [self interpolateFrom:-self.k_drawerWidth to:0 percent:percent];
+            self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+            self.rightViewController.view.alpha = drawerViewAlpha;
+        } else {
+            x = [self interpolateFrom:self.k_drawerWidth to:0 percent:percent];
+            self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
+            self.leftViewController.view.alpha = drawerViewAlpha;
+        }
+        self.mainViewController.view.frame = CGRectMake(x, y, CGRectGetWidth(MAINBOUNDS), heigh);
+        self.mainViewController.view.layer.shadowOpacity = mainShadowOpacity;
+        self.maskView.alpha = alpha;
+        self.maskView.frame = self.mainViewController.view.bounds;
+    } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
+        if (!self.shouldBeginOpenning) {
+            return;
+        }
+        CGPoint velocity = [gesture velocityInView:self.view];
+        if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
+            if (velocity.x < 0) {
+                [self openRightDrawer];
+            } else {
+                [self closeRightDrawer];
+            }
+        } else {
+            if (velocity.x > 0) {
+                [self openLeftDrawer];
+            } else {
+                [self closeLeftDrawer];
+            }
+        }
+    }
 }
 
 #pragma mark -- get
-
 - (UIScreenEdgePanGestureRecognizer *)gestureOfOpeningLeftDrawer {
-	if (!_gestureOfOpeningLeftDrawer) {
+    if (!_gestureOfOpeningLeftDrawer) {
         _gestureOfOpeningLeftDrawer = [[UIScreenEdgePanGestureRecognizer alloc] init];
         _gestureOfOpeningLeftDrawer.edges = UIRectEdgeLeft;
         [_gestureOfOpeningLeftDrawer addTarget:self action:@selector(responsToGesture:)];
-	}
-	return _gestureOfOpeningLeftDrawer;
+    }
+    return _gestureOfOpeningLeftDrawer;
 }
 - (UIScreenEdgePanGestureRecognizer *)gestureOfOpeningRightDrawer {
-	if (!_gestureOfOpeningRightDrawer) {
-		_gestureOfOpeningRightDrawer = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(responsToGesture:)];
-		_gestureOfOpeningRightDrawer.edges = UIRectEdgeRight;
-	}
-	return _gestureOfOpeningRightDrawer;
+    if (!_gestureOfOpeningRightDrawer) {
+        _gestureOfOpeningRightDrawer = [[UIScreenEdgePanGestureRecognizer alloc]initWithTarget:self action:@selector(responsToGesture:)];
+        _gestureOfOpeningRightDrawer.edges = UIRectEdgeRight;
+    }
+    return _gestureOfOpeningRightDrawer;
 }
 - (UIPanGestureRecognizer *)panGestureOfOpeningLeftDrawer {
-	if (!_panGestureOfOpeningLeftDrawer) {
-		_panGestureOfOpeningLeftDrawer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)];
-	}
-	return _panGestureOfOpeningLeftDrawer;
+    if (!_panGestureOfOpeningLeftDrawer) {
+        _panGestureOfOpeningLeftDrawer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)];
+    }
+    return _panGestureOfOpeningLeftDrawer;
 }
 - (UIPanGestureRecognizer *)panGestureOfOpeningRightDrawer {
-	if (!_panGestureOfOpeningRightDrawer) {
-		_panGestureOfOpeningRightDrawer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)];
-	}
-	return _panGestureOfOpeningRightDrawer;
+    if (!_panGestureOfOpeningRightDrawer) {
+        _panGestureOfOpeningRightDrawer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)];
+    }
+    return _panGestureOfOpeningRightDrawer;
 }
 - (UIView *)maskView {
-	if (!_maskView) {
-		_maskView = [[UIView alloc]init];
-		_maskView.frame = self.mainViewController.view.bounds;
-		_maskView.alpha = 0;
-		_maskView.backgroundColor = [UIColor blackColor];
-		[_maskView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnMaskView:)]];
-		[_maskView addGestureRecognizer:[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)]];
-	}
-	return _maskView;
+    if (!_maskView) {
+        _maskView = [[UIView alloc]init];
+        _maskView.alpha = 0;
+        _maskView.backgroundColor = [UIColor blackColor];
+        [_maskView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnMaskView:)]];
+        [_maskView addGestureRecognizer:[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panOnMaskView:)]];
+    }
+    _maskView.frame = self.mainViewController.view.bounds;
+    return _maskView;
 }
 
-- (CGFloat)drawerWidth {
-	if (!_drawerWidth) {
-		_drawerWidth = CGRectGetWidth(self.view.bounds)*0.8;
-	}
-	return _drawerWidth;
+- (CGFloat)k_drawerWidth {
+    if (self.drawerWidth) {
+        _k_drawerWidth = self.drawerWidth * MAINSCREENBOUNDS.size.width;
+    } else {
+        _k_drawerWidth = MAINSCREENBOUNDS.size.width * 0.8;
+    }
+    return _k_drawerWidth;
+}
+
+- (void)setDrawerWidth:(CGFloat)drawerWidth {
+    _drawerWidth = drawerWidth / MAINSCREENBOUNDS.size.width;
 }
 - (CGFloat)mainYOfOpeningDrawer {
-	if (!_mainYOfOpeningDrawer) {
-		_mainYOfOpeningDrawer = 0.f;
-	}
-	return _mainYOfOpeningDrawer;
+    if (!_mainYOfOpeningDrawer) {
+        _mainYOfOpeningDrawer = 0.f;
+    }
+    return _mainYOfOpeningDrawer;
 }
 - (CGFloat)maskAlpha {
-	if (!_maskAlpha) {
-		_maskAlpha = .1f;
-	}
-	return _maskAlpha;
+    if (!_maskAlpha) {
+        _maskAlpha = .1f;
+    }
+    return _maskAlpha;
 }
 - (CGFloat)drawerAlpha
 {
@@ -419,13 +472,13 @@ static const CGFloat velocity_ = 10.f;
     return _drawerScale;
 }
 - (CGFloat)mainShadowOpacity {
-	if (!_mainShadowOpacity) {
-		if (_maskAlpha != 0.1f) {
-			_mainShadowOpacity = 0.0f;
-		} else {
-			_mainShadowOpacity = 1.0f;
-		}
-	}
-	return _mainShadowOpacity;
+    if (!_mainShadowOpacity) {
+        if (_maskAlpha != 0.1f) {
+            _mainShadowOpacity = 0.0f;
+        } else {
+            _mainShadowOpacity = 1.0f;
+        }
+    }
+    return _mainShadowOpacity;
 }
 @end
