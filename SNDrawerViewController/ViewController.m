@@ -23,14 +23,13 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc]
-										  initWithMainViewController:[[MainViewController alloc] init]
-										  leftViewController:[[LeftViewController alloc] init]
-										  rightViewController:[[RightViewController alloc] init]];
-	
+	SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc] initWithMainViewController:[[MainViewController alloc] init]
+                                                                                 leftViewController:[[LeftViewController alloc] init]
+                                                                                rightViewController:[[RightViewController alloc] init]];
+    /* configure your drawer */
+    
 	[self addChildViewController:SNDrawerVC];
 	[self.view addSubview:SNDrawerVC.view];
-	
 }
 
 
