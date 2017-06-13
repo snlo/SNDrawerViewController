@@ -11,7 +11,7 @@
 
 @interface SNDrawerViewController ()
 
-@property (nonatomic, assign) CGFloat k_drawerWidth;
+@property (nonatomic, assign) CGFloat drawerWidthScale;
 
 @property (nonatomic, strong) UIViewController *mainViewController;
 @property (nonatomic, strong) UIViewController *leftViewController;
@@ -52,6 +52,9 @@ static const CGFloat duration_ = 0.3f;
 static const CGFloat velocity_ = 10.f;
 
 @implementation SNDrawerViewController
+
+@synthesize drawerWidth = _drawerWidth;
+
 #pragma mark --intilate
 
 
@@ -78,7 +81,7 @@ static const CGFloat velocity_ = 10.f;
     [self initializeAppearance];
 }
 - (void)viewWillLayoutSubviews {
-    [self k_drawerWidth];
+    [self drawerWidth];
 }
 - (void)viewDidLayoutSubviews {
     [self maskView];
@@ -97,10 +100,10 @@ static const CGFloat velocity_ = 10.f;
                 
             } break;
             case SNDrawerViewStateLeftOpening: {
-                self.mainViewController.view.frame = CGRectMake(self.k_drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
+                self.mainViewController.view.frame = CGRectMake(self.drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
             } break;
             case SNDrawerViewStateRightOpening: {
-                self.mainViewController.view.frame = CGRectMake( - self.k_drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
+                self.mainViewController.view.frame = CGRectMake( - self.drawerWidth, mainViewFrame.origin.y, mainViewFrame.size.width, mainViewFrame.size.height);
             } break;
             default: {
                 
@@ -145,7 +148,7 @@ static const CGFloat velocity_ = 10.f;
         [self.view insertSubview:self.leftViewController.view belowSubview:self.mainViewController.view];
         [self.leftViewController.view addGestureRecognizer:self.panGestureOfOpeningLeftDrawer];
         [self.mainViewController.view addSubview:self.maskView];
-        frame = CGRectMake(self.k_drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
+        frame = CGRectMake(self.drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
         scale = 1;
         maskAlpha = self.maskAlpha;
         drawerAlpha = 1;
@@ -179,7 +182,7 @@ static const CGFloat velocity_ = 10.f;
         [self.mainViewController.view addSubview:self.maskView];
         [self.view insertSubview:self.rightViewController.view belowSubview:self.mainViewController.view];
         [self.mainViewController.view addSubview:self.maskView];
-        frame = CGRectMake(-self.k_drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
+        frame = CGRectMake(-self.drawerWidth, self.mainYOfOpeningDrawer, CGRectGetWidth(MAINBOUNDS), CGRectGetHeight(MAINBOUNDS) - 2*self.mainYOfOpeningDrawer);
         scale = 1;
         maskAlpha = self.maskAlpha;
         drawerAlpha = 1;
@@ -260,7 +263,7 @@ static const CGFloat velocity_ = 10.f;
                     percent = 1;
                 }
                 CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
-                CGFloat x = [self interpolateFrom:0 to:self.k_drawerWidth percent:percent];
+                CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:percent];
                 CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
                 CGFloat heigh = [self interpolateFrom:CGRectGetHeight(MAINBOUNDS) to:CGRectGetHeight(MAINBOUNDS)-2*self.mainYOfOpeningDrawer percent:percent];
                 CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
@@ -294,7 +297,7 @@ static const CGFloat velocity_ = 10.f;
                     percent = 1;
                 }
                 CGFloat scale = [self interpolateFrom:self.drawerScale to:1 percent:percent];
-                CGFloat x = [self interpolateFrom:0 to:self.k_drawerWidth percent:-percent];
+                CGFloat x = [self interpolateFrom:0 to:self.drawerWidth percent:-percent];
                 CGFloat y = [self interpolateFrom:0 to:self.mainYOfOpeningDrawer percent:percent];
                 CGFloat heigh = [self interpolateFrom:CGRectGetHeight(MAINBOUNDS) to:CGRectGetHeight(MAINBOUNDS)-2*self.mainYOfOpeningDrawer percent:percent];
                 CGFloat maskAlpha = [self interpolateFrom:0 to:self.maskAlpha percent:percent];
@@ -360,11 +363,11 @@ static const CGFloat velocity_ = 10.f;
         CGFloat mainShadowOpacity = [self interpolateFrom:self.mainShadowOpacity to:0 percent:percent];
         CGFloat alpha = [self interpolateFrom:self.maskAlpha to:0 percent:percent];
         if (self.mainViewController.view.center.x < CGRectGetWidth(MAINBOUNDS)/2) {
-            x = [self interpolateFrom:-self.k_drawerWidth to:0 percent:percent];
+            x = [self interpolateFrom:-self.drawerWidth to:0 percent:percent];
             self.rightViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
             self.rightViewController.view.alpha = drawerViewAlpha;
         } else {
-            x = [self interpolateFrom:self.k_drawerWidth to:0 percent:percent];
+            x = [self interpolateFrom:self.drawerWidth to:0 percent:percent];
             self.leftViewController.view.transform = CGAffineTransformMakeScale(scale, scale);
             self.leftViewController.view.alpha = drawerViewAlpha;
         }
@@ -433,17 +436,17 @@ static const CGFloat velocity_ = 10.f;
     return _maskView;
 }
 
-- (CGFloat)k_drawerWidth {
-    if (self.drawerWidth) {
-        _k_drawerWidth = self.drawerWidth * MAINSCREENBOUNDS.size.width;
-    } else {
-        _k_drawerWidth = MAINSCREENBOUNDS.size.width * 0.8;
-    }
-    return _k_drawerWidth;
-}
-
 - (void)setDrawerWidth:(CGFloat)drawerWidth {
-    _drawerWidth = drawerWidth / MAINSCREENBOUNDS.size.width;
+    _drawerWidth = drawerWidth;
+    self.drawerWidthScale = drawerWidth / MAINSCREENBOUNDS.size.width;
+}
+- (CGFloat)drawerWidth {
+    if (self.drawerWidthScale) {
+        _drawerWidth = self.drawerWidthScale * MAINSCREENBOUNDS.size.width;
+    } else {
+        _drawerWidth = MAINSCREENBOUNDS.size.width * 0.8;
+    }
+    return _drawerWidth;
 }
 - (CGFloat)mainYOfOpeningDrawer {
     if (!_mainYOfOpeningDrawer) {
