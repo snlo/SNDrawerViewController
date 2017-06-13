@@ -18,6 +18,7 @@
 		89CC14451C5285B4008A0AF7 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14441C5285B4008A0AF7 /* MainViewController.m */; };
 		89CC14481C5285F1008A0AF7 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC14471C5285F1008A0AF7 /* LeftViewController.m */; };
 		89CC144B1C528600008A0AF7 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89CC144A1C528600008A0AF7 /* RightViewController.m */; };
+		B368F7BE1EEFB23F00D536E8 /* 屏幕快照 2017-06-13 上午11.12.23.png in Resources */ = {isa = PBXBuildFile; fileRef = B368F7BD1EEFB23F00D536E8 /* 屏幕快照 2017-06-13 上午11.12.23.png */; };
 		B38184981E9CD68800B411BA /* SNDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = B38184941E9CD68800B411BA /* SNDrawer.m */; };
 		B38184991E9CD68800B411BA /* SNDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B38184971E9CD68800B411BA /* SNDrawerViewController.m */; };
 /* End PBXBuildFile section */
@@ -62,6 +63,7 @@
 		89CC14471C5285F1008A0AF7 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		89CC14491C528600008A0AF7 /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
 		89CC144A1C528600008A0AF7 /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
+		B368F7BD1EEFB23F00D536E8 /* 屏幕快照 2017-06-13 上午11.12.23.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "屏幕快照 2017-06-13 上午11.12.23.png"; sourceTree = "<group>"; };
 		B38184931E9CD68800B411BA /* SNDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawer.h; sourceTree = "<group>"; };
 		B38184941E9CD68800B411BA /* SNDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawer.m; sourceTree = "<group>"; };
 		B38184951E9CD68800B411BA /* SNDrawerFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerFramework.h; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				89CC14181C528319008A0AF7 /* Assets.xcassets */,
 				89CC141A1C528319008A0AF7 /* LaunchScreen.storyboard */,
 				89CC141D1C528319008A0AF7 /* Info.plist */,
+				B368F7BC1EEFB23800D536E8 /* Resources */,
 				89CC140C1C528319008A0AF7 /* Supporting Files */,
 			);
 			path = SNDrawerViewController;
@@ -173,6 +176,14 @@
 				B38184971E9CD68800B411BA /* SNDrawerViewController.m */,
 			);
 			path = Drawers;
+			sourceTree = "<group>";
+		};
+		B368F7BC1EEFB23800D536E8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B368F7BD1EEFB23F00D536E8 /* 屏幕快照 2017-06-13 上午11.12.23.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89CC141C1C528319008A0AF7 /* LaunchScreen.storyboard in Resources */,
+				B368F7BE1EEFB23F00D536E8 /* 屏幕快照 2017-06-13 上午11.12.23.png in Resources */,
 				89CC14191C528319008A0AF7 /* Assets.xcassets in Resources */,
 				89CC14171C528319008A0AF7 /* Main.storyboard in Resources */,
 			);
