@@ -70,4 +70,4 @@ SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc] initWithMai
 
 ## License
 
-SNDrawerViewController是根据MIT许可证发布的。有关详细信息，请参阅LICENSE。
+SNDrawerViewController是根据MIT许可证发布的。有关详细信息，请参阅[LICENSE](https://github.com/snlo/SNDrawerViewController/blob/master/LICENSE)。
