@@ -23,32 +23,32 @@ typedef NS_ENUM(NSUInteger, SNDrawerViewState) {
 /**
  抽屉的宽，默认是当前屏幕的宽的0.8倍
  */
-@property (nonatomic) CGFloat drawerWidth;
+@property (nonatomic, assign) CGFloat drawerWidth;
 
 /**
  抽屉打开状态下，主页的起始坐标的高度
  */
-@property (nonatomic) CGFloat mainYOfOpeningDrawer;
+@property (nonatomic, assign) CGFloat mainYOfOpeningDrawer;
 
 /**
  主页蒙版透明度，默认值为0.1f
  */
-@property (nonatomic) CGFloat maskAlpha;
+@property (nonatomic, assign) CGFloat maskAlpha;
 
 /**
  左右抽屉透明度，默认值为0.1f。
  */
-@property (nonatomic) CGFloat drawerAlpha;
+@property (nonatomic, assign) CGFloat drawerAlpha;
 
 /**
  抽屉缩放比例。0 ~ 1,
  */
-@property (nonatomic) CGFloat drawerScale;
+@property (nonatomic, assign) CGFloat drawerScale;
 
 /**
  主页阴影，默认值为1.0f，当maskAlpha被修改后默认值为0.0f
  */
-@property (nonatomic) CGFloat mainShadowOpacity;
+@property (nonatomic, assign) CGFloat mainShadowOpacity;
 
 /**
  抽屉开起状态。
