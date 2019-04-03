@@ -22,6 +22,9 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    
+    
+//    pod trunk push SNDrawerViewController.podspec --verbose --allow-warnings --use-libraries
 	
 	SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc] initWithMainViewController:[[MainViewController alloc] init]
                                                                                  leftViewController:[[LeftViewController alloc] init]
