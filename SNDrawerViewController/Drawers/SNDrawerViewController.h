@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "SNDrawer.h"
+
 typedef NS_ENUM(NSUInteger, SNDrawerViewState) {
     SNDrawerViewStateNone,          //默认，尚未开起抽屉的状态
     SNDrawerViewStateLeftOpening,   //左抽屉开起状态

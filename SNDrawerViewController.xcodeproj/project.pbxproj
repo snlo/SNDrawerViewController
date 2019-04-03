@@ -66,7 +66,6 @@
 		B328BCD21EEFD0A300DB2B1E /* DrawerExhibition.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DrawerExhibition.gif; sourceTree = "<group>"; };
 		B38184931E9CD68800B411BA /* SNDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawer.h; sourceTree = "<group>"; };
 		B38184941E9CD68800B411BA /* SNDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawer.m; sourceTree = "<group>"; };
-		B38184951E9CD68800B411BA /* SNDrawerFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerFramework.h; sourceTree = "<group>"; };
 		B38184961E9CD68800B411BA /* SNDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNDrawerViewController.h; sourceTree = "<group>"; };
 		B38184971E9CD68800B411BA /* SNDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNDrawerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,7 +170,6 @@
 			children = (
 				B38184931E9CD68800B411BA /* SNDrawer.h */,
 				B38184941E9CD68800B411BA /* SNDrawer.m */,
-				B38184951E9CD68800B411BA /* SNDrawerFramework.h */,
 				B38184961E9CD68800B411BA /* SNDrawerViewController.h */,
 				B38184971E9CD68800B411BA /* SNDrawerViewController.m */,
 			);
@@ -272,6 +270,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

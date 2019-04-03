@@ -7,7 +7,6 @@
 //
 
 #import "SNDrawerViewController.h"
-#import "SNDrawer.h"
 
 @interface SNDrawerViewController ()
 
