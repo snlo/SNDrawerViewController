@@ -97,15 +97,23 @@ typedef NS_ENUM(NSUInteger, SNDrawerViewState) {
 - (instancetype)initWithMainViewController:(UIViewController *)mainViewController rightViewController:(UIViewController *)rightViewController;
 
 /**
- 快速打开左右抽屉捷径
+ 快速打开左抽屉捷径
  */
 - (void)openLeftDrawer;
+
+/**
+ 快速打开右抽屉捷径
+ */
 - (void)openRightDrawer;
 
 /**
- 快速关闭左右抽屉捷径
+ 快速关闭左抽屉捷径
  */
 - (void)closeLeftDrawer;
+
+/**
+ 快速关闭右抽屉捷径
+ */
 - (void)closeRightDrawer;
 
 @end

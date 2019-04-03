@@ -29,8 +29,7 @@ static id _drawer = nil;
     return _drawer;
 }
 
-+ (SNDrawerViewController *)sharedDrawer
-{
++ (SNDrawerViewController *)sharedDrawer {
     return [SNDrawer sharedManager].drawerViewController;
 }
 
