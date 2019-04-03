@@ -25,7 +25,7 @@ SNDrawerViewController是由一个根控制器分别持有左抽屉控制器、�
 
 ## usage
 
-首先import ‘SNDrawerFramework.h’。创建主页和抽屉的Controller，并加载。
+首先import ‘SNDrawerViewController.h’。创建主页和抽屉的Controller，并加载。
 
 ```objective-c
 SNDrawerViewController *SNDrawerVC = [[SNDrawerViewController alloc] initWithMainViewController:[[MainViewController alloc] init]
