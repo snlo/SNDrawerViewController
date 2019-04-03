@@ -33,6 +33,8 @@
     
 	[self addChildViewController:SNDrawerVC];
 	[self.view addSubview:SNDrawerVC.view];
+    
+    
 }
 
 

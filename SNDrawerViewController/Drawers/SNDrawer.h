@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SNDrawerViewController.h"
+@class SNDrawerViewController;
 
+/**
+ 抽屉管理者
+ */
 @interface SNDrawer : NSObject
 
-@property (nonatomic) SNDrawerViewController * drawerViewController;
+@property (nonatomic, strong) SNDrawerViewController * drawerViewController;
 
 /**
  单例初始化
